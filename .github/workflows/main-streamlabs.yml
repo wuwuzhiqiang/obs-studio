@@ -73,9 +73,7 @@ jobs:
       #     CefBuildConfig: ${{matrix.CefBuildConfig}}
       #     ARCH: ${{matrix.arch}}
       - name: mkdir file
-        run: echo ${{ env.TAG_NAME#refs/tags/ }} && mkdir -pv ${{env.InstallPath}}/buildResult
-        env:
-          TAG_NAME: ${{ github.ref }} 
+        run: echo ${{github.ref}} && mkdir -pv ${{env.InstallPath}}/buildResult
       - name: Tar artifact for deployment
         if: startsWith(github.ref, 'refs/tags/')
         run: cd ${{env.InstallPath}} && 7z a -r ../${{env.TARGET_ARTIFACT}}.7z *
@@ -87,8 +85,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.RELEASE_TOKEN}}
         with:
-          tag_name: ${{env.TAG_NAME}}
-          release_name: Release ${{env.TAG_NAME}}
+          tag_name: ${{github.ref}}
+          release_name: Release ${{github.ref}}
           draft: false
           prerelease: false
       - name: 上传发布的资源
