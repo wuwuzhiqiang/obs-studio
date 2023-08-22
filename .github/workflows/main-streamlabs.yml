@@ -4,7 +4,6 @@ on:
   push:
     paths-ignore:
       - '**.md'
-    branches: [ "streamlabs" ]
     tags:
       - 'v*'
 
@@ -43,38 +42,40 @@ jobs:
       LIBMEDIASOUPCLIENT_VERSION_MAC: '55d724f-b230130'
 
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
-      - name: Get the version
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-        shell: bash
-      - name: 'Setup build environment'
-        id: setup
-        run: |
-          REMOVE_FORMULAS=""
-          for FORMULA in ${{ env.BLOCKED_FORMULAS }}; do
-            if [ -d "/usr/local/opt/${FORMULA}" ]; then
-              REMOVE_FORMULAS="${REMOVE_FORMULAS}${FORMULA} "
-            fi
-          done
+      # - name: 'Checkout'
+      #   uses: actions/checkout@v3
+      #   with:
+      #     submodules: 'recursive'
+      # - name: Get the version
+      #   id: get_version
+      #   run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+      #   shell: bash
+      # - name: 'Setup build environment'
+      #   id: setup
+      #   run: |
+      #     REMOVE_FORMULAS=""
+      #     for FORMULA in ${{ env.BLOCKED_FORMULAS }}; do
+      #       if [ -d "/usr/local/opt/${FORMULA}" ]; then
+      #         REMOVE_FORMULAS="${REMOVE_FORMULAS}${FORMULA} "
+      #       fi
+      #     done
 
-          if [ -n "${REMOVE_FORMULAS}" ]; then
-            brew uninstall ${REMOVE_FORMULAS}
-          fi
+      #     if [ -n "${REMOVE_FORMULAS}" ]; then
+      #       brew uninstall ${REMOVE_FORMULAS}
+      #     fi
 
-          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-      - name: 'Switch to Xcode 14.1'
-        run: sudo xcode-select -switch /Applications/Xcode_14.1.app
-      - name: Configure / Build 
-        run: ./slobs_CI/build-script-osx.sh
-        env:
-          ReleaseName: ${{matrix.ReleaseName}}
-          BuildConfig: ${{matrix.BuildConfig}}
-          CefBuildConfig: ${{matrix.CefBuildConfig}}
-          ARCH: ${{matrix.arch}}
+      #     echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+      # - name: 'Switch to Xcode 14.1'
+      #   run: sudo xcode-select -switch /Applications/Xcode_14.1.app
+      # - name: Configure / Build 
+      #   run: ./slobs_CI/build-script-osx.sh
+      #   env:
+      #     ReleaseName: ${{matrix.ReleaseName}}
+      #     BuildConfig: ${{matrix.BuildConfig}}
+      #     CefBuildConfig: ${{matrix.CefBuildConfig}}
+      #     ARCH: ${{matrix.arch}}
+      - name: mkdir file
+        run: mkdir ${{env.InstallPath}}/buildResult && echo ${{env.TAG_NAME}}
       - name: Tar artifact for deployment
         if: startsWith(github.ref, 'refs/tags/')
         run: cd ${{env.InstallPath}} && 7z a -r ../${{env.TARGET_ARTIFACT}}.7z *
