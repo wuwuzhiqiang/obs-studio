@@ -73,7 +73,9 @@ jobs:
       #     CefBuildConfig: ${{matrix.CefBuildConfig}}
       #     ARCH: ${{matrix.arch}}
       - name: mkdir file
-        run: echo ${{github.ref#refs/tags/}} && mkdir -pv ${{env.InstallPath}}/buildResult
+        run: echo ${{ env.TAG_NAME#refs/tags/ }} && mkdir -pv ${{env.InstallPath}}/buildResult
+        env:
+          TAG_NAME: ${{ github.ref }} 
       - name: Tar artifact for deployment
         if: startsWith(github.ref, 'refs/tags/')
         run: cd ${{env.InstallPath}} && 7z a -r ../${{env.TARGET_ARTIFACT}}.7z *
