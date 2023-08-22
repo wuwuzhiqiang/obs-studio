@@ -22,7 +22,8 @@ jobs:
       matrix:
         # arch: ['x86_64', 'arm64']
         arch: ['arm64']
-        ReleaseName: [release, debug]
+        # ReleaseName: [release, debug]
+        ReleaseName: [debug]
         include:
         - ReleaseName: release
           BUILD_CONFIG: RelWithDebInfo
@@ -85,8 +86,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.RELEASE_TOKEN}}
         with:
-          tag_name: ${{github.ref}}
-          release_name: Release ${{github.ref}}
+          tag_name: ${{env.TAG_NAME}}
+          release_name: Release ${{env.TAG_NAME}}
           draft: false
           prerelease: false
       - name: 上传发布的资源
