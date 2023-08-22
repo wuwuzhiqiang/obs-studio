@@ -6,7 +6,7 @@ on:
       - '**.md'
     branches: [ "streamlabs" ]
     tags:
-      - '*'
+      - 'v*'
 
 env:
   InstallPath: "packed_build"
