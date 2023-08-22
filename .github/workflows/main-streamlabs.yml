@@ -2,10 +2,8 @@ name: 'CI Multiplatform Build'
 
 on:
   push:
-    paths-ignore:
-      - '**.md'
     tags:
-      - 'v*'
+      - v*
 
 env:
   InstallPath: "packed_build"
