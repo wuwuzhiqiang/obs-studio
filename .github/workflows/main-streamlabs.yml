@@ -22,8 +22,8 @@ jobs:
         # ReleaseName: [release, debug]
         ReleaseName: [debug]
         include:
-        - ReleaseName: release
-          BUILD_CONFIG: RelWithDebInfo
+        # - ReleaseName: release
+        #   BUILD_CONFIG: RelWithDebInfo
         - ReleaseName: debug
           BUILD_CONFIG: Debug
     env:
@@ -80,13 +80,14 @@ jobs:
         env:
           TARGET_ARTIFACT: ${{env.PACKAGE_NAME}}-${{env.OS_TAG}}-${{matrix.ReleaseName}}-${{ steps.get_version.outputs.VERSION }}-${{ matrix.arch }}
       - name: 创建发布
+        if: 
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{secrets.RELEASE_TOKEN}}
         with:
           tag_name: ${{github.ref}}
-          release_name: ${{github.ref_name}}-${{matrix.ReleaseName}}
+          release_name: ${{github.ref_name}}
           draft: false
           prerelease: false
       - name: 上传发布的资源
