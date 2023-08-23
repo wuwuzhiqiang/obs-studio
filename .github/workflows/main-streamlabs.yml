@@ -20,7 +20,7 @@ jobs:
         # arch: ['x86_64', 'arm64']
         arch: ['arm64']
         ReleaseName: [release, debug]
-        ReleaseName: [debug]
+        # ReleaseName: [debug]
         include:
         - ReleaseName: release
           BUILD_CONFIG: RelWithDebInfo
